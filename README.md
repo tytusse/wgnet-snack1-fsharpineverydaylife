@@ -1,1 +1,1 @@
-# tytusse-wgnetsnack1-fsharpeveryday
+# wgnet snack: FSharp na codzień
