@@ -26,7 +26,12 @@
 			<div class="slides">
 				<section>Slide 1</section>
 				<section>Slide 2</section>
-                <section data-markdown="Readme.md"></section>
+                <section data-markdown="README.md"></section>
+                <!--
+                    Note that Windows uses `\r\n` instead of `\n` as its linefeed character.
+                    For a regex that supports all operating systems, use `\r?\n` instead of `\n`.
+                -->
+                </section>
 			</div>
 		</div>
 
