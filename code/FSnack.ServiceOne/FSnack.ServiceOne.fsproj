@@ -56,6 +56,13 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FSnack.CoreLib\FSnack.CoreLib.fsproj">
+      <Name>FSnack.CoreLib</Name>
+      <Project>{6f14f35c-3d6d-41ce-aa93-7d0adf7a83c1}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -68,6 +75,17 @@
       <ItemGroup>
         <Reference Include="FSharp.Core">
           <HintPath>..\packages\FSharp.Core\lib\net45\FSharp.Core.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5.2'">
+      <ItemGroup>
+        <Reference Include="FSharp.Data.Xsd">
+          <HintPath>..\packages\FSharp.Data.Xsd\lib\net45\FSharp.Data.Xsd.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
