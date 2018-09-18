@@ -54,3 +54,4 @@ HttpListener.Run("http://*:8070/",(fun req resp ->
             resp.OutputStream.Close()         
         }
     )) |> ignore
+System.Diagnostics.Process.Start(@"http://localhost:8070/")
