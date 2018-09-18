@@ -3,10 +3,10 @@ open System.Net
 open System.IO
 // based on: http://www.fssnip.net/1X/title/Simple-HTTP-server-with-Async-workflow
 // on windows 10: 
-//   - netsh http delete urlacl url=http://+:8090/
+//   - netsh http delete urlacl url=http://+:<port>/
 //   - needs to run as admin
 // on windows 7(?): 
-//   - netsh http add urlacl url=http://+:8090/ user=DOMAIN\user
+//   - netsh http add urlacl url=http://+:<port>/ user=DOMAIN\user
 
 type HttpListener with
     static member Run (url:string,handler: (HttpListenerRequest -> HttpListenerResponse -> Async<unit>)) = 
@@ -21,7 +21,7 @@ type HttpListener with
         } |> Async.Start 
         listener
 
-HttpListener.Run("http://*:8090/",(fun req resp -> 
+HttpListener.Run("http://*:8070/",(fun req resp -> 
         let root = "docs"
         async {
             printfn "handling %O" req.Url
@@ -44,8 +44,8 @@ HttpListener.Run("http://*:8090/",(fun req resp ->
             if File.Exists fullpath
             then
                 printfn "file found"
-                let out = Text.Encoding.ASCII.GetBytes fullpath
-                resp.OutputStream.Write(out,0,out.Length)
+                use fstr = File.OpenRead(fullpath)
+                do! fstr.CopyToAsync(resp.OutputStream) |> Async.AwaitTask
             else 
                 printfn "not found"
                 resp.StatusCode <- 404
