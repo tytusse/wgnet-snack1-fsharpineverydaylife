@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.28010.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSnack.CoreLib", "FSnack.CoreLib\FSnack.CoreLib.fsproj", "{6F14F35C-3D6D-41CE-AA93-7D0ADF7A83C1}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSnack.SystemTests", "FSnack.SystemTests\FSnack.SystemTests.fsproj", "{E3F277F0-4123-4265-AE0F-473EE95DB19C}"
-EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSnack.CoreLibTests", "FSnack.CoreLibTests\FSnack.CoreLibTests.fsproj", "{5285EB06-099C-456C-8E45-64632168007B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "paket", "paket", "{F9A045CB-6FC6-41A4-8248-5EEB39BD54DF}"
@@ -27,10 +25,6 @@ Global
 		{6F14F35C-3D6D-41CE-AA93-7D0ADF7A83C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F14F35C-3D6D-41CE-AA93-7D0ADF7A83C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F14F35C-3D6D-41CE-AA93-7D0ADF7A83C1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E3F277F0-4123-4265-AE0F-473EE95DB19C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E3F277F0-4123-4265-AE0F-473EE95DB19C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E3F277F0-4123-4265-AE0F-473EE95DB19C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E3F277F0-4123-4265-AE0F-473EE95DB19C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5285EB06-099C-456C-8E45-64632168007B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5285EB06-099C-456C-8E45-64632168007B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5285EB06-099C-456C-8E45-64632168007B}.Release|Any CPU.ActiveCfg = Release|Any CPU

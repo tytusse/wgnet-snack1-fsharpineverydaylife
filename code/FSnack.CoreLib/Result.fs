@@ -18,6 +18,15 @@ let errors ps =
         | Error x -> Some x
     ps |> Seq.choose p
 
+let partition results =
+    ([], [])
+    |> Seq.foldBack(fun r (ok, bad) ->
+        match r with
+        | Ok r -> (r::ok, bad)
+        | Error e -> (ok, e::bad)
+        )
+        results
+
 let asOption = function
 | Ok s -> Some s
 | Error _ -> None

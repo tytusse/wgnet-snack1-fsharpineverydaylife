@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified"
+           targetNamespace="Candies"
+           xmlns:candies="Candies">
+
+  <element name="Import">
+    <complexType>
+      <sequence>
+        <element name="Candy" maxOccurs="unbounded">
+          <complexType>
+            <attribute name="Name" type="string" use="required" />
+            <attribute name="BestBeforeDate" type="date" use="required" />
+            <attribute name="Remarks" type="string"  />
+          </complexType>
+        </element>
+      </sequence>
+    </complexType>
+  </element>
+</schema>

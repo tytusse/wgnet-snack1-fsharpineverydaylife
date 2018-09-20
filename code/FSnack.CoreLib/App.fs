@@ -4,6 +4,7 @@ open Castle.MicroKernel.Registration
 open Castle.Windsor
 open System
 open Castle.Facilities.Logging
+open Castle.Facilities.TypedFactory
 
 type HandlingResult = bool
 type Handler<'Event> = 'Event -> Async<HandlingResult>
@@ -12,18 +13,18 @@ type IHandlerSelector<'Event> =
     abstract MaybeHandler: evt:'Event -> Handler<'Event> option
 
 type IStartable = 
-    abstract member Start: unit -> unit
+    abstract member Startup: Async<unit>
     abstract member OrdinalNumber: int
 
 type IDispatcher<'Event> =
     abstract Post: 'Event -> unit
 
-//type IConfig =
-
 type private Dispatcher<'Event>
     (hsFac:ComponentModel.IFactory<IHandlerSelector<'Event>>,
      logger:ILogger,
      token:CancellationToken) =
+    
+    do logger.Info "starting"
 
     let handleEvt evt = async {
         try
@@ -55,14 +56,17 @@ type private Dispatcher<'Event>
     interface IDispatcher<'Event> with
         member __.Post(evt:'Event) = agent.Post(evt)
 
-let run () =
+let runWith (extraConfig:IWindsorContainer->IWindsorContainer) =
     let wc = 
         (new WindsorContainer())
         |> Windsor.addFacility<Windsor.FsOptionFacility>
+        |> Windsor.addFacility<TypedFactoryFacility>
         |> Windsor.addFacilityWith(fun (x:LoggingFacility) -> 
-            // in PRD other logging obviousely
             x.LogUsing<Castle.Core.Logging.ConsoleFactory>())
         |> Windsor.registerSome [
+            Component
+                .For(typedefof<ComponentModel.IFactory<_>>)
+                .AsFactory()
             Component
                 .For(typedefof<IDispatcher<_>>)
                 .ImplementedBy(typedefof<Dispatcher<_>>)
@@ -71,23 +75,28 @@ let run () =
                 .Instance(
                     ComponentModel.delegatedProvider "DateTime.UtcNow" System.DateTime.get_UtcNow)
                 .IsFallback()
-                
         ]
         |> Windsor.installSome [
             Installer.FromAssembly.This()
             Installer.FromAssembly.Instance(System.Reflection.Assembly.GetEntryAssembly())
         ]
+        |> extraConfig
     
     let startables = wc.ResolveAll<IStartable>()
     match
         startables 
         |> Array.sortBy(fun s -> s.OrdinalNumber)
-        |> Array.map(fun s -> Result.maybeExn s.Start ())
+        // we can implement more elaborate strategy for startup, i.e. group by
+        // ordinal no and start each group separately
+        // here for simplicity just run it on this thread
+        |> Array.map(fun s ->  Result.maybeExn Async.RunSynchronously s.Startup)
         |> Result.errors
         |> List.ofSeq
         with
-    | [] -> () //OK
+    | [] -> () 
     | errs -> raise <| AggregateException errs
+
+let run () = runWith id
     
 
 
