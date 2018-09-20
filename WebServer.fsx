@@ -2,11 +2,8 @@ open System
 open System.Net
 open System.IO
 // based on: http://www.fssnip.net/1X/title/Simple-HTTP-server-with-Async-workflow
-// on windows 10: 
-//   - netsh http delete urlacl url=http://+:<port>/
-//   - needs to run as admin
-// on windows 7(?): 
-//   - netsh http add urlacl url=http://+:<port>/ user=DOMAIN\user
+// needs to run as admin or run this first in console (with admin privleges):
+// - netsh http add urlacl url=http://*:8070/ user=GIERCOL\Tomek
 
 type HttpListener with
     static member Run (url:string,handler: (HttpListenerRequest -> HttpListenerResponse -> Async<unit>)) = 
