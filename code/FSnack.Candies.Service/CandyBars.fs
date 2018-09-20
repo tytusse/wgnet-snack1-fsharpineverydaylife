@@ -48,6 +48,7 @@ type Selector(fac:ComponentModel.IFactory<Import>) =
             if newFile.EndsWith(".candies.xml", System.StringComparison.OrdinalIgnoreCase)
             then Some(fun x ->
                 use impl = fac.CreateAutorelease()
+                // BUG here: async escapes outside 'use' scope
                 impl.Value.Handler x)
             else None
 
