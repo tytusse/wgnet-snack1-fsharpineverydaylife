@@ -98,9 +98,10 @@ let runWith (extraConfig:IWindsorContainer->IWindsorContainer) =
     | [] -> () 
     | errs -> raise <| AggregateException errs
 
-    // better in PRD
+    // better solution in PRD
     Console.ReadLine() |> ignore
     printfn " Cancelling..."
+
     cancellation.Cancel()
 
 let run () = runWith id

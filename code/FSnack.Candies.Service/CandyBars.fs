@@ -36,7 +36,7 @@ type Import
         good
         |> Seq.map(fun c -> sprintf "    %s, Remark=%A" c.Name c.Remark )
         |> String.concat "\n"
-        |> logger.Errorf "Following candies are not good:\n %s"
+        |> logger.Infof "Bon apetit with these:\n %s"
 
         return List.isEmpty bad 
     }
@@ -45,7 +45,7 @@ type Import
 type Selector(fac:ComponentModel.IFactory<Import>) =
     interface App.IHandlerSelector<Events.NewFileEvent> with
         member __.MaybeHandler (Events.NewFileEvent newFile) = 
-            if newFile.EndsWith(".candybars.xml", System.StringComparison.OrdinalIgnoreCase)
+            if newFile.EndsWith(".candies.xml", System.StringComparison.OrdinalIgnoreCase)
             then Some(fun x ->
                 use impl = fac.CreateAutorelease()
                 impl.Value.Handler x)

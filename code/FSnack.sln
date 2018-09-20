@@ -16,9 +16,6 @@ EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSnack.Candies.Service", "FSnack.Candies.Service\FSnack.Candies.Service.fsproj", "{8D763486-0646-4439-80EF-AA086FEE0FCE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{33EFFD5E-8D5E-4B93-9713-6E511745C860}"
-	ProjectSection(SolutionItems) = preProject
-		FSnack.Candies.Service\sample.candies.xml = FSnack.Candies.Service\sample.candies.xml
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
