@@ -36,16 +36,50 @@
                 </section>
                 <section data-markdown>
                     ## O czym by tu ...
-                    - struktura projektu - projects / modules / classes / DI / paket
+                    - struktura projektu - projects / modules / classes / DI / paket / tests
                     - async + MailboxProcessor + Result + computation expressions + type providers + ...
+                    - use + IDisposable + inline object
                     - testy
-                    - fsx
+                    - type inference / tuples / custom operators
+                    - F# interactive / scripting / fsx
                     - o tooling'u ...
                     - skąd F#?
                 </section>
                 <section data-markdown>
                     ## Aplikacja 
-                    --&gt; Visual Studio
+                    kod
+
+                    &rArr; Visual Studio
+
+                    Notes:
+                    - pokazać projekty, omówić krótko w kilku słowach
+                        - Core - może być współdzielona, boilerplate tu, 
+                        - Service - konkretna aplikacja używająca Core - samo mięcho
+                        - unit testy
+                        - (????) system testy - automatyczne testy "integracyjne"
+                    - moduły, klasy i serwisy (na podstawie CandyService)
+                        - klasy w modułąch
+                        - unikamy namespace
+                        - unikamy otwierania modułów
+                    - DI
+                        - Windsor
+                        - rozszeżenie do FSharp Option
+                </section>
+                <section data-markdown>
+                    ## Tooling ...
+                    - podstawowe funkcje działają: podświetlanie typów (ważne przy type inference), rename, ...
+                    - zdecydowanie uboższy niż dla C#, szczególnie boli słabszy intelisense
+                    - nie działa z R#, choć unit testy do pewnego stopnia obsługuje
+                    - treat **FS0025** compiler warning as error
+                </section>
+                
+                <section data-markdown>
+                    ## Uwagi końcowe
+                    - F# jest też językiem obiektowym - nie należy się bać OOP
+                    - F# może wyrazić większość rzeczy z C# (w tym na przykład P/Invoke)
+                    - F# może współpracować z C# (extension methods, default parameters, value tuple, ...)
+                    - FSX + VS Code = środowisko skryptowe, playground
+                    - Tooling w VS dla F# jest uboższy niż np. dla C#
                 </section>
                 <section data-markdown>
                     ## Kontakt
