@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Import xmlns="Candies">
+    <Candy Name="Jupiter moon" BestBeforeDate="2018-10-01" />
+    <Candy Name="Sun spot" BestBeforeDate="2017-10-01" />
+    <Candy Name="Aurora borealis" BestBeforeDate="2019-10-01" Remarks="Awesome" />
+</Import>
