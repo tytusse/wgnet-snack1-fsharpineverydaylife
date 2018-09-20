@@ -55,6 +55,7 @@ type Installer() =
     interface IWindsorInstaller with
         member __.Install(c, _) = 
             c.Register(
+                Component.For<Import>().LifestyleTransient(),
                 Component
                     .For<App.IHandlerSelector<Events.NewFileEvent>>()
                     .ImplementedBy<Selector>())

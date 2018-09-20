@@ -22,7 +22,7 @@ type IDispatcher<'Event> =
 type private Dispatcher<'Event>
     (hsFac:ComponentModel.IFactory<IHandlerSelector<'Event>>,
      logger:ILogger,
-     token:CancellationToken) =
+     token:RefCancellationToken) =
     
     do logger.Info "starting"
 
@@ -46,7 +46,7 @@ type private Dispatcher<'Event>
             do! handleEvt evt
             return! handle mb
         }
-        new MailboxProcessor<_>(handle, token)
+        new MailboxProcessor<_>(handle, token.Token)
     
     do 
         // crashes service if threading configured properly
@@ -57,6 +57,7 @@ type private Dispatcher<'Event>
         member __.Post(evt:'Event) = agent.Post(evt)
 
 let runWith (extraConfig:IWindsorContainer->IWindsorContainer) =
+    let cancellation = new CancellationTokenSource()
     let wc = 
         (new WindsorContainer())
         |> Windsor.addFacility<Windsor.FsOptionFacility>
@@ -64,6 +65,7 @@ let runWith (extraConfig:IWindsorContainer->IWindsorContainer) =
         |> Windsor.addFacilityWith(fun (x:LoggingFacility) -> 
             x.LogUsing<Castle.Core.Logging.ConsoleFactory>())
         |> Windsor.registerSome [
+            Component.For<RefCancellationToken>().Instance({Token = cancellation.Token})
             Component
                 .For(typedefof<ComponentModel.IFactory<_>>)
                 .AsFactory()
@@ -95,6 +97,11 @@ let runWith (extraConfig:IWindsorContainer->IWindsorContainer) =
         with
     | [] -> () 
     | errs -> raise <| AggregateException errs
+
+    // better in PRD
+    Console.ReadLine() |> ignore
+    printfn " Cancelling..."
+    cancellation.Cancel()
 
 let run () = runWith id
     

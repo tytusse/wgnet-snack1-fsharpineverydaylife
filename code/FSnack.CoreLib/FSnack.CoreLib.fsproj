@@ -49,8 +49,8 @@
     <Compile Include="Option.fs" />
     <Compile Include="Windsor.fs" />
     <Compile Include="Result.fs" />
-    <Compile Include="FileSystem.fs" />
     <Compile Include="CoreTypeExtensions.fs" />
+    <Compile Include="FileSystem.fs" />
     <Compile Include="Aliases.fs" />
     <Compile Include="App.fs" />
     <Content Include="paket.references" />
