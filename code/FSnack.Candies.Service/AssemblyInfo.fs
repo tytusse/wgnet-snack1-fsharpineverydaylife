@@ -1,4 +1,4 @@
-﻿namespace FSnack.ServiceOne.AssemblyInfo
+﻿namespace FSnack.Candies.Service.AssemblyInfo
 
 open System.Reflection
 open System.Runtime.CompilerServices

@@ -18,14 +18,6 @@ let addSubResolverDependent sdrf (cnt:IWindsorContainer) = cnt.Kernel.Resolver.A
 let addSubResolver<'Sdr when 'Sdr: (new: unit ->'Sdr) and 'Sdr :> ISubDependencyResolver> (cnt:IWindsorContainer) = cnt.Kernel.Resolver.AddSubResolver(new 'Sdr());cnt
 let resolve<'T> (cnt:IWindsorContainer) = cnt.Resolve<'T>()
 
-module private Option =
-    let optionTypeOpen = typedefof<_ option> 
-
-    let isOptionType = function
-    | Reflection.Generic optionTypeOpen _ -> true
-    | _ -> false
-
-
 /// Enable using FS option type in constructor parameters as an "optional dependency"
 type FsOptionFacility() =
 
@@ -43,11 +35,9 @@ type FsOptionFacility() =
             Option.isOptionType dependency.TargetType
         
         member __.Resolve(context, contextHandlerResolver, model, dependency) = 
-            let d' = dependency
             let dependency =
                 match dependency.TargetType with
                 | Reflection.Generic optionTypeDef [|t|] -> 
-                    
                     let q = DependencyModel(dependency.DependencyKey, t, false, dependency.HasDefaultValue, dependency.DefaultValue)
                     q.Init(model.Parameters)
                     q.Parameter <- dependency.Parameter
