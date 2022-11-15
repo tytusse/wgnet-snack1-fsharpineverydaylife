@@ -79,7 +79,7 @@ let runWith (extraConfig:IWindsorContainer->IWindsorContainer) =
                 .IsFallback()
         ]
         |> Windsor.installSome [
-            Installer.FromAssembly.This()
+            Installer.FromAssembly.Instance(System.Reflection.Assembly.GetExecutingAssembly())
             Installer.FromAssembly.Instance(System.Reflection.Assembly.GetEntryAssembly())
         ]
         |> extraConfig

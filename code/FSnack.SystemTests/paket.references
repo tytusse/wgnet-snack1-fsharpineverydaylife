@@ -1,9 +1,0 @@
-FSharp.Core
-System.ValueTuple
-
-Castle.LoggingFacility
-
-Foq
-xunit.assert
-xunit.core
-xunit.runner.visualstudio

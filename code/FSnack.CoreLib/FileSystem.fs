@@ -42,7 +42,7 @@ type Disk(logger:ILogger) =
             if not (Directory.Exists path )
             then
                 logger.Infof "Creating directory %s" path
-                Directory.CreateDirectory path
+                Directory.CreateDirectory path |> ignore
         }
 
 type Installer() =
