@@ -3,10 +3,10 @@
 open System.Reflection
 
 type ComputationBuilder() =
-    member __.Return(v) = Some v
-    member __.ReturnFrom(m) = m
-    member __.Zero() = None
-    member __.Bind(m, f) = 
+    member inline _.Return(v) = Some v
+    member inline _.ReturnFrom(m) = m
+    member inline _.Zero() = None
+    member inline _.Bind(m, [<InlineIfLambda>]f) = 
         match m with
         | Some m' -> f(m')
         | _ -> None

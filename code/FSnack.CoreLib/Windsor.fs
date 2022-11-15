@@ -30,11 +30,11 @@ type FsOptionFacility() =
 
         dependency
 
-    let subResolver (kernel:IKernel) = { new Castle.MicroKernel.ISubDependencyResolver with
-        member __.CanResolve(_, _, _, dependency) = 
+    let subResolver (kernel:IKernel) = { new ISubDependencyResolver with
+        member _.CanResolve(_, _, _, dependency) = 
             Option.isOptionType dependency.TargetType
         
-        member __.Resolve(context, contextHandlerResolver, model, dependency) = 
+        member _.Resolve(context, contextHandlerResolver, model, dependency) = 
             let dependency =
                 match dependency.TargetType with
                 | Reflection.Generic optionTypeDef [|t|] -> 
@@ -42,7 +42,7 @@ type FsOptionFacility() =
                     q.Init(model.Parameters)
                     q.Parameter <- dependency.Parameter
                     fixParameter q
-                | t -> failwithf "Type %A should be generic type with 1 param" t
+                | t -> failwith $"Type %A{t} should be generic type with 1 param"
 
             let some, none = Option.createDynamicWrapper dependency.TargetType
             let parms = context, contextHandlerResolver, model, dependency
@@ -55,17 +55,17 @@ type FsOptionFacility() =
     }
 
     let contributor = { new Castle.MicroKernel.ModelBuilder.IContributeComponentModelConstruction with
-        member __.ProcessModel(_, model: ComponentModel) = 
+        member _.ProcessModel(_, model: ComponentModel) = 
             model.Dependencies :> _ seq
             |> Seq.filter (fun d -> d.TargetType |> Option.isOptionType) 
             |> Seq.iter (fun d -> d.IsOptional <- true)
         }
 
-    interface Castle.MicroKernel.IFacility with
-        member __.Init(kernel: IKernel, _) = 
+    interface IFacility with
+        member _.Init(kernel: IKernel, _) = 
             kernel.Resolver.AddSubResolver(subResolver kernel)
             kernel.ComponentModelBuilder.AddContributor(contributor)
         
-        member __.Terminate(): unit = ()
+        member _.Terminate(): unit = ()
 
     

@@ -4,16 +4,6 @@ module FSnack.CoreLib.CoreTypeExtensions
 open Castle.Core.Logging
 open System
 
-type ILogger with
-    member x.Logf logMethod fmt = Printf.kprintf (logMethod x) fmt
-    member x.Errorf fmt = x.Logf (fun l -> l.Error:string->unit) fmt
-    member x.Errorf(ex, fmt) =
-        let err msg = x.Error(msg, ex)
-        Printf.kprintf err fmt
-    member x.Infof fmt = x.Logf (fun l -> l.Info:string->unit) fmt
-    member x.Debugf fmt = x.Logf (fun l -> l.Debug:string->unit) fmt
-    member x.Warnf fmt = x.Logf (fun l -> l.Warn:string->unit) fmt
-
 type ComponentModel.IFactory<'Component> with
     member fac.CreateAutorelease<'Component>() =
         new ComponentModel.AutoRelease<'Component>

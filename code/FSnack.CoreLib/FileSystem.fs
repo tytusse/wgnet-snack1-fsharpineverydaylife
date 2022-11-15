@@ -23,31 +23,31 @@ type private DiskWatcher(path:Path) =
     let evt = w.Created |> Event.map(fun x -> x.FullPath)
     do w.EnableRaisingEvents <- true
     interface IWatcher with
-        member __.Credated = evt
-        member __.Dispose() = w.Dispose()
+        member _.Credated = evt
+        member _.Dispose() = w.Dispose()
     
 type Disk(logger:ILogger) =
     interface Interface with
-        member __.ListFiles(path) = async {
+        member _.ListFiles(path) = async {
             return Directory.GetFiles path |> List.ofArray
         }
-        member __.OpenRead(path) = 
-            logger.Infof "opening file %s for read" path
+        member _.OpenRead(path) = 
+            logger.Info $"opening file %s{path} for read"
             File.OpenRead path :> Stream
-        member __.OpenWrite(path) = 
-            logger.Infof "opening file %s for write" path
+        member _.OpenWrite(path) = 
+            logger.Info $"opening file %s{path} for write"
             File.OpenWrite path :> Stream
-        member __.DirWatcher(path) = async { return new DiskWatcher(path) :> IWatcher}
-        member __.AssureDir(path) = async {
+        member _.DirWatcher(path) = async { return new DiskWatcher(path) :> IWatcher}
+        member _.AssureDir(path) = async {
             if not (Directory.Exists path )
             then
-                logger.Infof "Creating directory %s" path
+                logger.Info $"Creating directory %s{path}"
                 Directory.CreateDirectory path |> ignore
         }
 
 type Installer() =
     interface IWindsorInstaller with
-        member __.Install(c, _) = 
+        member _.Install(c, _) = 
             c.Register 
                 (Component.For<Interface>().ImplementedBy<Disk>()) 
             |> ignore

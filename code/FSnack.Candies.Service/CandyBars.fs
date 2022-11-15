@@ -18,7 +18,7 @@ type Import
         fs:FileSystem.Interface, 
         date:ComponentModel.IProvider<System.DateTime>,
         logger:ILogger) =
-    member __.Handler(Events.NewFileEvent path) = async { 
+    member _.Handler(Events.NewFileEvent path) = async { 
         use str = new System.IO.StreamReader(fs.OpenRead path)
         let! txt = str.ReadToEndAsync() |> Async.AwaitTask
         let xml = Xml.Parse txt
@@ -29,14 +29,16 @@ type Import
             |> Result.partition
         
         bad
-        |> Seq.map(fun (e,c) -> sprintf "    %A = %s" c e)
+        |> Seq.map(fun (e,c) -> $"    %A{c} = %s{e}")
         |> String.concat "\n"
-        |> logger.Errorf "Following candies are not good:\n %s"
+        |> sprintf "Following candies are not good:\n %s"
+        |> logger.Error 
 
         good
-        |> Seq.map(fun c -> sprintf "    %s, Remark=%A" c.Name c.Remark )
+        |> Seq.map(fun c -> $"    %s{c.Name}, Remark=%A{c.Remark}" )
         |> String.concat "\n"
-        |> logger.Infof "Bon apetit with these:\n %s"
+        |> sprintf "Bon apetit with these:\n %s"
+        |> logger.Info 
 
         return List.isEmpty bad 
     }
@@ -44,7 +46,7 @@ type Import
 // explicitly use module names
 type Selector(fac:ComponentModel.IFactory<Import>) =
     interface App.IHandlerSelector<Events.NewFileEvent> with
-        member __.MaybeHandler (Events.NewFileEvent newFile) = 
+        member _.MaybeHandler (Events.NewFileEvent newFile) = 
             if newFile.EndsWith(".candies.xml", System.StringComparison.OrdinalIgnoreCase)
             then Some(fun x ->
                 use impl = fac.CreateAutorelease()
@@ -54,7 +56,7 @@ type Selector(fac:ComponentModel.IFactory<Import>) =
 
 type Installer() =
     interface IWindsorInstaller with
-        member __.Install(c, _) = 
+        member _.Install(c, _) = 
             c.Register(
                 Component.For<Import>().LifestyleTransient(),
                 Component

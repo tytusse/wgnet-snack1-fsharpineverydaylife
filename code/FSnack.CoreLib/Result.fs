@@ -1,13 +1,13 @@
 ﻿module FSnack.CoreLib.Result
 
 type ComputationBuilder() =
-    member __.Return(v) = Ok v
-    member __.ReturnFrom(m) = m
-    member __.Bind(m, f) =
+    member inline _.Return(v) = Ok v
+    member inline _.ReturnFrom(m) = m
+    member inline _.Bind(m, [<InlineIfLambda>]f) =
         match m with
         | Ok s -> f s
         | Error f -> Error f
-    member __.Zero() = Ok()
+    member inline _.Zero() = Ok()
 
 let computationBuilder = ComputationBuilder()
 

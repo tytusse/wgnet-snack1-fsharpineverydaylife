@@ -31,13 +31,13 @@ type private Dispatcher<'Event>
             use selectors = hsFac.ResolveAllAutorelease()
             let inline maybeHandler (sel:IHandlerSelector<_>) = sel.MaybeHandler evt
             match selectors.Value |> Seq.tryPick maybeHandler with
-            | None -> logger.Warnf "Could not find handler for event %O" evt
+            | None -> logger.Warn $"Could not find handler for event {evt}"
             | Some handler ->
                 let! result = handler evt
                 if result
-                then logger.Infof "Successfully handled event %O" evt
-                else logger.Errorf "Could not handle event %O" evt
-        with x -> logger.Error(sprintf "Failed handling event %O" evt, x)
+                then logger.Info $"Successfully handled event {evt}"
+                else logger.Error $"Could not handle event {evt}"
+        with x -> logger.Error($"Failed handling event {evt}", x)
     }
     
     let agent = 
@@ -54,7 +54,7 @@ type private Dispatcher<'Event>
         agent.Start()
 
     interface IDispatcher<'Event> with
-        member __.Post(evt:'Event) = agent.Post(evt)
+        member _.Post(evt:'Event) = agent.Post(evt)
 
 let runWith (extraConfig:IWindsorContainer->IWindsorContainer) =
     let cancellation = new CancellationTokenSource()
@@ -73,9 +73,9 @@ let runWith (extraConfig:IWindsorContainer->IWindsorContainer) =
                 .For(typedefof<IDispatcher<_>>)
                 .ImplementedBy(typedefof<Dispatcher<_>>)
             Component
-                .For<ComponentModel.IProvider<System.DateTime>>()
+                .For<ComponentModel.IProvider<DateTime>>()
                 .Instance(
-                    ComponentModel.delegatedProvider "DateTime.UtcNow" System.DateTime.get_UtcNow)
+                    ComponentModel.delegatedProvider "DateTime.UtcNow" DateTime.get_UtcNow)
                 .IsFallback()
         ]
         |> Windsor.installSome [
